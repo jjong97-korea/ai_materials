@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ctext y='19' font-size='20'%3E%F0%9F%93%8B%3C/text%3E%3C/svg%3E" />
+<link
+  rel="stylesheet"
+  as="style"
+  crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css"
+/>
+<title>프롬프트 Copy Book</title>
+<style>
+  :root {
+    --color-brand: #6a5af9;
+    --color-brand-alt: #4e8cf7;
+    --color-brand-soft: #f1efff;
+    --color-text: #14141a;
+    --color-text-muted: #71717a;
+    --color-border: #ececf0;
+    --color-bg: #ffffff;
+    --color-bg-subtle: #f7f7f9;
+    --color-ink: #101014;
+    --color-success-text: #1f9254;
+    --color-danger-text: #d64545;
+    --radius-sm: 10px;
+    --header-height: 64px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    color: var(--color-text);
+    background: var(--color-bg-subtle);
+  }
+
+  a {
+    color: inherit;
+  }
+
+  .copybook {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .copybook__topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: var(--header-height);
+    padding: 0 24px;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .copybook__logo {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6a5af9 0%, #4e8cf7 100%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .copybook__brand {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+
+  .copybook__brand-sub {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    margin-left: 2px;
+  }
+
+  .copybook__body {
+    flex: 1;
+    display: flex;
+    min-height: 0;
+  }
+
+  .copybook__sidebar {
+    width: 220px;
+    flex: 0 0 220px;
+    background: var(--color-ink);
+    color: #c7ccd6;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+    overflow-y: auto;
+  }
+
+  .copybook__sidebar-hint {
+    margin: 0 20px 14px;
+    font-size: 11px;
+    color: #8b93a3;
+  }
+
+  .copybook__nav-item {
+    all: unset;
+    box-sizing: border-box;
+    display: block;
+    width: 100%;
+    padding: 11px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    border-left: 3px solid transparent;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .copybook__nav-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+  }
+
+  .copybook__nav-item.is-active {
+    background: rgba(106, 90, 249, 0.22);
+    border-left-color: var(--color-brand-alt);
+    color: #fff;
+    font-weight: 700;
+  }
+
+  .copybook__main {
+    flex: 1;
+    overflow-y: auto;
+    padding: 32px 40px 80px;
+  }
+
+  .copybook__title {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+
+  .copybook__desc {
+    margin: 0 0 28px;
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
+
+  .copybook__unit {
+    margin-bottom: 14px;
+  }
+
+  .copybook__divider {
+    border: 0;
+    border-top: 1px dashed var(--color-border);
+    margin: 34px 0 22px;
+  }
+
+  .copybook__unit-title {
+    display: inline-block;
+    background: var(--color-brand-soft);
+    color: #4c3fd1;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 16px;
+  }
+
+  .copybook__card {
+    position: relative;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 16px 48px 16px 46px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    line-height: 1.65;
+    font-size: 14.5px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+  }
+
+  .copybook__card:hover {
+    border-color: var(--color-brand-alt);
+    box-shadow: 0 4px 14px rgba(106, 90, 249, 0.14);
+  }
+
+  .copybook__card:active {
+    transform: scale(0.998);
+  }
+
+  .copybook__hover-tip {
+    position: fixed;
+    left: 0;
+    top: 0;
+    transform: translate(-50%, calc(-100% - 14px));
+    background: var(--color-ink);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.4;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.1s ease;
+    z-index: 1000;
+  }
+
+  .copybook__hover-tip.is-show {
+    opacity: 1;
+  }
+
+  .copybook__card-num {
+    position: absolute;
+    left: 14px;
+    top: 16px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--color-brand-soft);
+    color: var(--color-brand);
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .copybook__card-num:hover {
+    background: var(--color-brand-alt);
+    color: #fff;
+  }
+
+  .copybook__card-hint {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+    font-size: 11px;
+    color: #b6bcc7;
+  }
+
+  .copybook__card:hover .copybook__card-hint {
+    color: var(--color-brand-alt);
+  }
+
+  .copybook__card.is-disabled {
+    cursor: default;
+    color: var(--color-text-muted);
+  }
+
+  .copybook__card.is-disabled:hover {
+    border-color: var(--color-border);
+    box-shadow: none;
+  }
+
+  .copybook__card.is-copied {
+    border-color: var(--color-success-text);
+    box-shadow: 0 4px 14px rgba(31, 146, 84, 0.18);
+  }
+
+  .copybook__card.is-copied .copybook__card-hint {
+    color: var(--color-success-text);
+    font-weight: 700;
+  }
+
+  .copybook__toast {
+    position: fixed;
+    left: 50%;
+    bottom: 36px;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--color-ink);
+    color: #fff;
+    padding: 11px 22px;
+    border-radius: 24px;
+    font-size: 13.5px;
+    z-index: 100;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .copybook__toast.is-show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .copybook__toast.is-error {
+    background: var(--color-danger-text);
+  }
+
+  @media (max-width: 720px) {
+    .copybook__body {
+      flex-direction: column;
+    }
+
+    .copybook__sidebar {
+      width: 100%;
+      flex: 0 0 auto;
+      flex-direction: row;
+      overflow-x: auto;
+      padding: 12px 8px;
+    }
+
+    .copybook__sidebar-hint {
+      display: none;
+    }
+
+    .copybook__nav-item {
+      flex-shrink: 0;
+      border-left: none;
+      border-bottom: 3px solid transparent;
+      white-space: nowrap;
+    }
+
+    .copybook__nav-item.is-active {
+      border-left-color: transparent;
+      border-bottom-color: var(--color-brand-alt);
+    }
+
+    .copybook__main {
+      padding: 24px 20px 60px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="copybook">
+  <header class="copybook__topbar">
+    <span class="copybook__logo" aria-hidden="true"></span>
+    <span class="copybook__brand">AI Studio</span>
+    <span class="copybook__brand-sub">· 프롬프트 Copy Book</span>
+  </header>
+
+  <div class="copybook__body">
+    <nav class="copybook__sidebar" id="nav" aria-label="챕터 목록">
+      
+    </nav>
+
+    <main class="copybook__main">
+      <h2 class="copybook__title" id="chapterTitle"></h2>
+      <p class="copybook__desc" id="chapterDesc">카드를 클릭하면 해당 프롬프트가 클립보드에 복사됩니다.</p>
+      <div id="content"></div>
+    </main>
+  </div>
+
+  <div class="copybook__toast" id="toast"></div>
+</div>
+
+<!--
+  ===================================================================
+  데이터 영역: src/pages/copybook-data/chapterN.txt 원문을 그대로 붙여넣는다.
+  txt를 수정/추가하면 이 영역만 갱신하면 된다.
+  <script type="text/plain"> 안이라 이스케이프가 필요 없다.
+  data-label = 사이드바에 표시할 이름
+  ===================================================================
+-->
+
+<script type="text/plain" class="chapter-data" data-label="Chapter 2" data-title="최신 AI 트렌드와 AI Top 4 툴 소개">
+[Unit 06] 필수로 다루어야 할 AI Top 4 툴 소개
+===
+1) 2020 ~ 2026년 메모리 시장 트렌드 조사해. 2) 2027 ~ 2035년 로봇 기술 트렌드 조사해줘. 3) 지금까지 조사한 메모리 트렌드와 로봇 트렌드를 결합하여 메모리 미래 예측 인사이트 문서를 작성해줘.
+
+중학생도 이해할 수 있도록 두줄 요약해줘.
+
+이제 고등학생 수준으로 10줄 요약해줘.
+
+원문에 쓰인 워딩을 사용하여 20줄로 요약해줘.
+
+할 일을 추가하고, 할 일 목록을 체크해보는 Web App 만들어줘 (HTML). 할 일 목록 이동도 되고, 삭제도 되게끔 해줘. UI는 심플, 파스텔톤.
+===
+</script>
+
+<script type="text/plain" class="chapter-data" data-label="Chapter 3" data-title="AI를 활용한 콘텐츠 생성 및 문서 제작">
+[STEP 1] Gemini + Canvas로 기획안 초안 작성
+===
+스마트폰 신제품을 기획해보고자 해. AI 기능이 강조된 새로운 스마트폰 런칭 기획안의 초안을 문서로 작성해줘. 제품명, 슬로건, 핵심 셀링포인트 3가지(온디바이스 AI 처리 속도 포함), 타겟 고객, 경쟁제품 대비 강점을 포함해줘.
+
+아니야.. 제품명이 프리미엄 스럽지 않아.
+한남더힐 같은 네이밍으로 바꿔.
+===
+[STEP 2] 기획서 초안 교차검증 (Gemini Pro)
+===
+내가 곧 피드백을 줄께. 잠깐만 기다려봐.
+
+첨부한 스마트폰 신제품 런칭 기획서를 검토해줘. 논리적 허점, 근거 불명확한 수치, 빠진 내용을 지적해줘.
+===
+[STEP 3] 슬라이드에 사용할 이미지 생성
+===
+교정한 내용 참고해서 디자인이 멋지게 보여지는 핸드폰 이미지 생성해. 글자는 없어야해. 고급스럽게. 카메라 렌즈는 9개로 해줘.
+
+방금 만든 이미지에 이어서 핸드폰의 예술적인 디자인 특징을 간단히 설명하는 컨셉으로 핸드폰 앞, 뒤 이미지를 생성해줘.
+===
+[STEP 4] 기획안 + 이미지를 이용하여 슬라이드 생성
+===
+기획서 내용 기반으로 6장짜리 스마트폰 신제품 런칭 발표자료를 만들어줘. 제작한 이미지 모두 슬라이드 안에 포함해야해 (프리젠테이션 슬라이드, 이미지 깨지면 안돼!)
+===
+</script>
+
+<script type="text/plain" class="chapter-data" data-label="Chapter 4" data-title="최신 AI 환경의 프롬프트 엔지니어링">
+[Unit 02] 프롬프트 다이어트 하기
+===
+여행지 추천 보고서를 써줘.
+1. 친근한 말투로 쓰고, 끝 말에 항상 '요'로 대답하도록 해, '왜냐하면', 등 논리적인 느낌의 딱딱한 말을 쓰지 말도록 해.
+2. 기승전결이 명확할 것.
+3. 엄마 아빠 아들, 세 명이 갈 곳을 정해야 해.
+4. 여행사 자료와 블로그 자료 찾아봐.
+5. 사람들이 많이 검색하는 인기 여행지 위주로 찾아봐. 인기 많은 여행지면 가족들이 거부반응이 없지.
+===
+[Unit 03] 프롬프트 엔지니어링 가이드
+===
+HBM과 SSD의 느린 속도를 보완하기 위한 HBF 기술을 설명하고, 이에 대한 성능 예측 발표 자료를 작성 해야 해. 내가 만들어달라고 직접적으로 말할 때 까지 만들지 마. 그런데 내가 HBM, SSD, HBF 에 대해 뭔지 잘 몰라 중학생도 이해할 수 있게 설명을 짧고 쉽게 해줘.
+
+HBM은 엄청 빠른 메모리이고 SSD는 저장장치인데 느려서 병목 현상이 생기니까, 이 사이에 HBF를 하나 추가하면 병목을 줄일 수 있다는 것이지? 내가 이해한 것이 맞아?
+
+나를 위해 HBM, SSD, HBF를 쉽게 이해할 수 있는 인터랙티브한 Web App(HTML문서)을 하나 만들어줘. 중학생도 이해할 수 있도록 해줘.
+
+지금부터 브레인스토밍을 해볼게. 어떤 흐름으로 발표 자료를 제작하면 좋을까? 개념도 설명해야 하고, 성능도 알려줘야 하고, 결론도 내야하고 하거든.
+
+HBF로 인해 성능이 좋아질 수 있음을 효과적으로 설명할 수 있는 후보 3개를 보여주는 인터랙티브한 Web App (HTML문서)을 만들어줘. 후보 1, 2, 3 중에 마음에 드는 것을 내가 채팅으로 알려줄게.
+
+후보 1이 마음에 드네. (발표자료 아직 만들지마, 아직 대화 안끝났어)
+
+발표 자료를 제작하기 전, 모호한 부분은 한번에 하나씩 질문해 줘.
+
+지금까지 대화를 기반으로 발표 자료를 제작해. Web 문서(HTML문서)으로 만들어. 인터랙티브하게 만들어줘.
+
+지금 첨부한 제안서 pdf에서
+설득 논리와 도표 구성 방식이 매우 훌륭한 것 같아.
+이 문서를 읽고 동일한 설득 방법과 톤앤매너를
+유지하도록 해서 B고객사 신규 제안서 초안을 작성해 줘.
+
+발표 자료 내용을 내가 완벽히 이해했는지 확인하는 용도로 O, X 퀴즈 4개를 내줘.
+
+아래는 네 가지 프롬프트 엔지니어링 기법이야. 1. Blindspot Pass : 내가 알지 못하는 부분 설명해달라고 하기. 2. Prototypes : 본인이 선택할 수 있는 선택지를 달라고 AI에게 요청한다. 3. Interviews : AI가 본인에게 궁금한 것을 물어보도록 요청한다. 4. Quizzes : 이해도를 높이기 위한 퀴즈를 내달라고 AI에게 요청한다. 위 네 가지 기법 별로, 내가 어떤 프롬프팅을 했었는지 정리한 Web App(HTML) 문서를 만들어줘.
+===
+</script>
+
+<script type="text/plain" class="chapter-data" data-label="Chapter 5" data-title="AI 활용 데이터 수집과 분석">
+[Unit 01] 프로젝트 배경
+===
+브레인스토밍을 해보자.
+내가 지금 어떤 상황인지 설명해 볼게. 우선 상황만 이해해 줘.
+(내가 직접적으로 요청하기 전까지는 문서를 만들지 말아줘)
+---
+나는 반도체 엔지니어이고, 모바일용 시스템 반도체(AP)를 개발하고 있어.
+우리 제품을 보드에 장착 후 테스트를 해보고 있는데 발열이 심해.
+좋은 열화상카메라를 사용하면, 정확히 어느 영역이 뜨거운지 정밀하게 파악할수 있대.
+분석을 위한 성능이 아주 좋은 열화상 카메라를 조사해야해.
+그런데 열화상 카메라에 대해서 내가 잘 몰라.
+최종적으로는 열화상 카메라 종류도 조사하고, 선택해서, 구매 제안서도 작성해야해.
+---
+
+열화상 카메라에 대해 지식이 전혀 없는 상황인데 내가 알아야 할 내용이 뭐가 있을까? 핵심 키워드와 과정을 중학생도 쉽게 이해할 수 있는 설명을 Web App (HTML 문서)으로 생성해서 보여줘.
+
+열화상 카메라는 결국 적외선 카메라 라는 것이지? 해상도가 중요하고, 접사 렌즈도 중요하고, 프레임이 중요하는 것 맞아? 온도 분해능?? 이게 뭐야? Web App(HTML)으로 더 쉽게 설명해봐.
+
+글이 너무 많아! 복잡해서 글 못읽겠어 덜 중요한거 다 빼! 내가 내 목적에 맞는 열화상 카메라를 구매할때 어떤것을 봐야할지 4개만 골라서 Web App(HTML)으로 짧게 설명해.
+
+목적/배경을 정리해서 글로 정리해줘. (Canvas 에다가) 내가 조사해야 할 4가지 스펙에 대해서 쉽게 정리한 내용도 포함해.
+
+데이터를 조사하기 전, 사전에 내가 알아야 할 내용을 중학생도 이해가기 쉽게 정리한 자료, 5 page
+===
+[Unit 02] 데이터 수집
+===
+내가 전달한 사이트 URL 별로 내용 정리해봐.
+
+반도체 불량 분석용 열화상 카메라 검색해줘.
+
+목적.md 를 참고하여 수집한 소스 URL 별로 관련성이 높은것과 낮은것을 별도 설명없이 아주 간결하게 ★1개 ~ 5개로 표로 정리해줘.
+
+목적.md 을 참고하여 열화상카메라에 중요하게 여기는 4대 Spec 중심으로 제품을 소개하는 보고서 만들어. (4대 Spec별 수치가 표로 정리되어야해)
+===
+[Unit 03] 데이터 선별
+===
+프로젝트 목적과 관련된 장비를 조사한 자료를 줄게. 먼저 장비별 조사 내용을 잘 정리해서 Web App (HTML)으로 만들어줘.
+
+장비별 조사 내용에 대해서 피드백을 몇 가지 줄테니까 일단 들어만 둬.
+
+장비별로, 적합도 종합 평가가 있으면 좋겠네. (아직 문서 만들지마)
+
+각 장비별로 센서 종류, 해상도, 공간 분해능, 프레임레이트만 있고 최대 강점과 약점 하나만 설명하고 기타 정보는 다 빼자. (아직 문서 만들지마)
+===
+[Unit 04] 슬라이드 제안서 작성
+===
+프레젠테이션 형태의 장비 도입 제안서를 만들기 전에, 먼저 계획을 세워줘. 계획을 내가 검토해볼꺼야. (최고경영진 타겟) 총 6 Page 이고, 각 Page별로 어떤 내용을 구성할지 제안서 작성을 위한 계획문서 작성해줘.
+
+전달한 주제에 대해 슬라이드를 만들 것인데 컬러 디자인시스템을 아직 못 정했어. 밝은 것부터 어두운 배경을 포함해서 디자인시스템 후보 16개를 보여주는 인터랙티브한 Web App (HTML 문서)을 만들어줘. 후보 1 ~ 16개 중에 마음에 드는 것 내가 선택해서 대답해줄께.
+
+후보 2번으로 제안서 만들어줘. (슬라이드)
+===
+[Unit 05] 인터랙티브 웹기반 문서 작성
+===
+나는 인터랙티브한 요소들이 많이 들어있는 장비 도입 Web 기반 제안서를 만들어야해. 비교를 쉽게 할 수 있는 인터랙티브한 웹 앱 제안서가 필요해. 내가 직접 최종 제안서를 만들라고 지시할 때까지 만들지 말아줘. 위 내용을 포함하여 어떤 내용을 구성할지 제안서 작성을 위한 계획문서 작성해줘.
+
+어떤 디자인 시안으로 진행할지 부터 정해보자. 파스텔 계통에 산뜻한 디자인으로 디자인 시안 후보 4개를 보여주는 인터랙티브한 Web App을 만들어줘. 후보 1 ~ 4번 중 내가 마음에 드는 것을 너에게 답변 해줄께.
+
+후보 2번으로 Web App 만들어줘. (HTML 문서)
+===
+</script>
+
+<script type="text/plain" class="chapter-data" data-label="Chapter 6" data-title="프롬프트 자산화하기">
+[Unit 01] Gemini Gems 개요
+===
+프로필 사진 생성기
+
+내 특징을 알려주면, 2D 애니메이션 프로필 사진 생성
+
+당신은 2D 애니메이터이다. 특징을 입력 받으면, 그 특징에 어울리는 2D 애니메이션 기반의 프로필 그림을 그려준다. 연령대, 성별을 물어보고 대답을 받으면 그림을 그려주도록 하자.
+===
+[Unit 03] AI 트렌드 분석 Gems 제작 실습
+===
+AI 트렌드 설명 비서
+
+AI 뉴스를 쉽게 설명해주는 비서
+
+https://news.hada.io/rss/news 에서 최신 뉴스 10개 중, AI 트렌드를 이해하기 가장 좋다고 생각하는 뉴스 3개를 너가 골라줘. 그 3개 News에 대해 쉽게 설명해주는 App을 만들고자 해. 난이도별로 볼 수 있는 3개 버튼이 있어야해. 1. 중학생도 이해할수 있고, 아주 쉽고 간략하게 설명한 Easy 버튼. 2. 고등학생 수준으로, 조금 쉽게 설명한 Normal 버튼. 3. 전공 대학생 1학년 수준으로, 조금 더 디테일하게 이해할 수 있는 Original 버튼.
+===
+</script>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- txt 파싱 ----------
+  // [Unit NN] 제목  →  === 내용 ===  구조를 파싱한다. (src/pages/copybookPrompts.ts 규칙 기반, 구분자만 다름)
+  // Unit 구분이 없는 챕터(Chapter 3)는 [STEP N] 같은 자유 라벨도 허용한다.
+  // 구분자는 === 이다. 교재 프롬프트 안에 --- 줄이 들어가는 경우가 있어 --- 를 쓰지 않는다.
+  function parseChapter(raw) {
+    var lines = raw.split(/\r?\n/);
+    var units = [];
+    var i = 0;
+
+    while (i < lines.length) {
+      var header = lines[i].match(/^\s*\[([^\]]+)\]\s*(.*)$/);
+      if (!header) { i++; continue; }
+      var num = header[1].trim().replace(/^unit/i, "Unit");
+      var name = header[2].trim();
+      i++;
+
+      while (i < lines.length && lines[i].trim() === "") i++;
+      if (i < lines.length && lines[i].trim() === "===") i++;
+
+      var body = [];
+      while (i < lines.length && lines[i].trim() !== "===") {
+        body.push(lines[i]); i++;
+      }
+      if (i < lines.length && lines[i].trim() === "===") i++;
+
+      var prompts = body.join("\n").split(/\n\s*\n/)
+        .map(function (s) { return s.trim(); })
+        .filter(Boolean);
+
+      units.push({ num: num, name: name, prompts: prompts });
+    }
+    return units;
+  }
+
+  var LOGIN_URL = "https://login.mincoding.co.kr";
+
+  // ---------- 데이터 수집 ----------
+  var chapters = Array.prototype.map.call(
+    document.querySelectorAll("script.chapter-data"),
+    function (el) {
+      return { label: el.getAttribute("data-label"), title: el.getAttribute("data-title"), units: parseChapter(el.textContent) };
+    }
+  ).filter(function (c) { return c.units.length > 0; });
+
+  // 링크 라우터: Chapter 6 바로 아래에 위치하는 별도 메뉴.
+  // 프롬프트 복사가 아니라, 번호를 누르면 지정된 주소로 이동하는 라우터 화면을 보여준다.
+  var chapter6Idx = chapters.findIndex(function (c) { return c.label === "Chapter 6"; });
+  var linkRouterChapter = {
+    label: "링크",
+    isRouter: true,
+    routes: [
+      { url: "https://aistudio.multicampus.com/ais/sec-ds/login", label: "AI Studio 강의실 로그인 링크" },
+      { url: LOGIN_URL, label: "실습 계정 로그인 링크" }
+    ]
+  };
+  chapters.splice(chapter6Idx === -1 ? chapters.length : chapter6Idx + 1, 0, linkRouterChapter);
+
+  // ---------- 렌더링 ----------
+  var navEl = document.getElementById("nav");
+  var contentEl = document.getElementById("content");
+  var titleEl = document.getElementById("chapterTitle");
+  var descEl = document.getElementById("chapterDesc");
+
+  // ---------- 마우스를 따라다니는 툴팁 ----------
+  var hoverTip = document.createElement("div");
+  hoverTip.className = "copybook__hover-tip";
+  document.body.appendChild(hoverTip);
+
+  function moveHoverTip(x, y) {
+    hoverTip.style.left = x + "px";
+    hoverTip.style.top = y + "px";
+  }
+
+  function showHoverTip(text, x, y) {
+    hoverTip.textContent = text;
+    moveHoverTip(x, y);
+    hoverTip.classList.add("is-show");
+  }
+
+  function hideHoverTip() {
+    hoverTip.classList.remove("is-show");
+  }
+
+  contentEl.addEventListener("mousemove", function (e) {
+    var numEl = e.target.closest(".copybook__card-num[data-tooltip]");
+    var cardEl = e.target.closest(".copybook__card[data-tooltip]");
+    if (numEl) {
+      showHoverTip(numEl.getAttribute("data-tooltip"), e.clientX, e.clientY);
+    } else if (cardEl) {
+      showHoverTip(cardEl.getAttribute("data-tooltip"), e.clientX, e.clientY);
+    } else {
+      hideHoverTip();
+    }
+  });
+
+  contentEl.addEventListener("mouseleave", hideHoverTip);
+
+  function renderNav(activeIdx) {
+    Array.prototype.slice.call(navEl.querySelectorAll(".copybook__nav-item")).forEach(function (el) { el.remove(); });
+    chapters.forEach(function (ch, idx) {
+      var item = document.createElement("button");
+      item.type = "button";
+      item.className = "copybook__nav-item" + (idx === activeIdx ? " is-active" : "");
+      item.textContent = ch.label;
+      item.addEventListener("click", function () { selectChapter(idx); });
+      navEl.appendChild(item);
+    });
+  }
+
+  function renderChapter(ch) {
+    titleEl.textContent = ch.title ? ch.label + " · " + ch.title : ch.label;
+    contentEl.innerHTML = "";
+
+    if (ch.isRouter) {
+      descEl.textContent = "카드를 클릭하면 해당 링크로 이동합니다.";
+      renderRouter(ch);
+      return;
+    }
+
+    descEl.textContent = "카드를 클릭하면 해당 프롬프트가 클립보드에 복사됩니다.";
+
+    ch.units.forEach(function (unit, uIdx) {
+      if (uIdx > 0) {
+        var hr = document.createElement("hr");
+        hr.className = "copybook__divider";
+        contentEl.appendChild(hr);
+      }
+
+      var wrap = document.createElement("section");
+      wrap.className = "copybook__unit";
+
+      var title = document.createElement("div");
+      title.className = "copybook__unit-title";
+      title.textContent = unit.name ? (unit.num + " · " + unit.name) : unit.num;
+      wrap.appendChild(title);
+
+      unit.prompts.forEach(function (text, pIdx) {
+        var card = document.createElement("div");
+        card.className = "copybook__card";
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.setAttribute("data-tooltip", "📋 복사");
+
+        var num = document.createElement("span");
+        num.className = "copybook__card-num";
+        num.textContent = pIdx + 1;
+        card.appendChild(num);
+
+        var hint = document.createElement("span");
+        hint.className = "copybook__card-hint";
+        hint.textContent = "📋 복사";
+        card.appendChild(hint);
+
+        var body = document.createElement("span");
+        body.textContent = text;
+        card.appendChild(body);
+
+        card.addEventListener("click", function () { copyText(text, card, hint); });
+        card.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); copyText(text, card, hint); }
+        });
+
+        wrap.appendChild(card);
+      });
+
+      contentEl.appendChild(wrap);
+    });
+    contentEl.parentElement.scrollTop = 0;
+  }
+
+  // ---------- 링크 라우터 렌더링 ----------
+  function renderRouter(ch) {
+    var wrap = document.createElement("section");
+    wrap.className = "copybook__unit";
+
+    var title = document.createElement("div");
+    title.className = "copybook__unit-title";
+    title.textContent = "바로가기";
+    wrap.appendChild(title);
+
+    ch.routes.forEach(function (route) {
+      var card = document.createElement("div");
+      card.className = "copybook__card";
+
+      var icon = document.createElement("span");
+      icon.className = "copybook__card-num";
+      icon.textContent = "🔗";
+      card.appendChild(icon);
+
+      var hint = document.createElement("span");
+      hint.className = "copybook__card-hint";
+      card.appendChild(hint);
+
+      var body = document.createElement("span");
+      card.appendChild(body);
+
+      if (route.url) {
+        body.textContent = route.label || "링크";
+        hint.textContent = "이동";
+        card.setAttribute("role", "button");
+        card.setAttribute("tabindex", "0");
+        card.addEventListener("click", function () {
+          window.open(route.url, "_blank", "noopener,noreferrer");
+        });
+        card.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); window.open(route.url, "_blank", "noopener,noreferrer"); }
+        });
+      } else {
+        body.textContent = "준비중";
+        hint.textContent = "";
+        card.classList.add("is-disabled");
+      }
+
+      wrap.appendChild(card);
+    });
+
+    contentEl.appendChild(wrap);
+    contentEl.parentElement.scrollTop = 0;
+  }
+
+  var currentIdx = -1;
+  function selectChapter(idx) {
+    if (idx === currentIdx) return;
+    currentIdx = idx;
+    renderNav(idx);
+    renderChapter(chapters[idx]);
+  }
+
+  // ---------- 복사 ----------
+  function copyText(text, card, hint) {
+    function done(ok) {
+      showToast(ok);
+      if (ok) {
+        card.classList.add("is-copied");
+        var prev = hint.textContent;
+        hint.textContent = "복사됨 ✓";
+        window.setTimeout(function () {
+          card.classList.remove("is-copied");
+          hint.textContent = prev;
+        }, 900);
+      }
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }).catch(function () { done(fallbackCopy(text)); });
+    } else {
+      done(fallbackCopy(text));
+    }
+  }
+
+  function fallbackCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.top = "-1000px";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+
+  // ---------- 토스트 ----------
+  var toastEl = document.getElementById("toast");
+  var toastTimer = null;
+  function showToast(ok) {
+    toastEl.textContent = ok ? "✓ 클립보드에 복사되었습니다" : "복사에 실패했습니다";
+    toastEl.className = "copybook__toast is-show" + (ok ? "" : " is-error");
+    if (toastTimer) window.clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(function () { toastEl.className = "copybook__toast"; }, 1600);
+  }
+
+  // ---------- 시작 ----------
+  if (chapters.length) {
+    renderNav(0);
+    selectChapter(0);
+  } else {
+    titleEl.textContent = "표시할 프롬프트가 없습니다.";
+  }
+})();
+</script>
+</body>
+</html>
